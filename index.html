@@ -1,0 +1,88 @@
+<html ng-app="listaTelefonica">
+<head>
+    <title>Lista Telefonica</title>
+
+    <!--importa boostrap-->
+    <link rel="stylesheet" type="text/css" href="lib/bootstrap/bootstrap.css">
+    
+    <!--ajusta propriedades do bootstrap-->
+    <style>
+        .jumbotron {
+            margin-top: 20px;
+            margin-right: auto;
+            margin-left: auto;
+            text-align: center;
+            width: 400px;
+        }
+        .table {
+            margin-top: 20px;
+        }
+        .form-control {
+            margin-top: 5px;
+        }
+        .btn {
+            margin-top: 5px;
+        }
+    </style>
+
+    <!--importa angular-->
+    <script src="lib/angular/angular.js"></script>
+    
+    <script>
+        angular.module("listaTelefonica", []);
+        angular.module("listaTelefonica").controller("listaTelefonicaCtrl", function($scope) {
+
+            //definindo atributos do escopo desta controller
+            $scope.appName="Lista Telefonica";
+            $scope.contatos= [  {nome:"Pedro", telefone:"9999-9999"},
+                                {nome:"Ana", telefone:"8888-8888"},
+                                {nome:"Maria", telefone:"7777-7777"}];
+            $scope.adicionarContato = function(contato) {
+                console.log("Adicionando " + contato.nome);
+                //MANTRA 1 (a evitar): Nunca ler $scope dentro da controller. Só escrever.
+                //$scope.contatos.push({nome: $scope.nome, telefone: $scope.telefone});
+                $scope.contatos.push(angular.copy(contato));
+                delete $scope.contato;
+
+            };
+        });
+    </script>
+
+</head>
+
+<!-- define o body como sendo toda a view -->
+<body ng-controller="listaTelefonicaCtrl">
+
+    <div class="jumbotron">
+
+        <!-- ng-bind atrela um atributo do scope a um elemento da view-->
+        <!--h4 ng-bind="app"></h4-->
+        <!--Tb pode ser exibido como abaixo-->
+        <h3>{{appName}}</h3>
+        <table class="table table-striped">
+            <tr>
+                <th>Nome</th>
+                <th>Telefone</th>
+            </tr>
+
+            <!-- diretiva ng-repeat instancia um template para cada item de uma coleção -->
+            <tr ng-repeat="contato in contatos">
+                    <td>{{contato.nome}}</td>
+                    <td>{{contato.telefone}}</td>
+                    <!-- ou
+                        onde key=nome, value=Pedro
+
+                        <td ng-repeat="(key,value) in contato"> -->
+            </tr>
+        </table>
+        <hr>
+        <!-- diretiva ng-model atualiza view->propriedade do -->
+        <input class="form-control" type="text" ng-model="contato.nome" placeholder="Nome">
+        <input class="form-control" type="text" ng-model="contato.telefone" placeholder="Telefone">
+        <button class="btn btn-primary btn-block" ng-click="adicionarContato(contato)">Adicionar contato</button>
+
+        <!--acessa/exibe propriedade do escopo-->
+        {{contato}}
+    </div>
+</body>
+</html>
